@@ -1,5 +1,6 @@
 import json
 import uuid
+import requests
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser, BaseUserManager
@@ -184,19 +185,27 @@ class JaenPublishFormPage(AbstractEmailForm):
 
     # Publish to git remote
     def publish(
-        self, git_user, git_token, git_remote, jaen_data
+        self, user, git_user, git_token, git_remote, jaen_data
     ):
         # Add user data
         # user = get_user_model()(username=username, is_active=False)
 
         # user.set_password(password)
-        print(f"help")
-        print(f"{self.__dict__}")
 
-        # Add jaen data
-        # user.jaen_account = JaenAccount.objects.create(user=user)
-        
-        # user.save()
+        url = f"https://api.github.com/repos/{git_remote}/dispatches"
+
+        headers = requests.structures.CaseInsensitiveDict()
+        headers["Accept"] = "application/vnd.github.everest-preview+json"
+        headers["Content-Type"] = "application/x-www-form-urlencoded"
+        headers["Authorization"] = git_token
+
+        test_data = '{"event_type":"update-jaen-data", "client_payload": { "dataLayer": { "quiz": { "sport": { "q1": { "question": "Which one is correct team name in NBA?", "options": [ "New York Bulls", "Los Angeles Kings", "Golden State Warriros", "Huston Rocket" ], "answer": "Huston Rocket" } }, "maths": { "q1": { "question": "5 + 7 = ?", "options": [ "10", "11", "12", "13" ], "answer": "12" }, "q2": { "question": "12 - 8 = ?", "options": [ "1", "2", "3", "4" ], "answer": "4" } } } }}'
+
+
+        resp = requests.post(url, headers=headers, data=jaen_data)
+
+        print(resp.status_code)
+
 
         return user
 
@@ -226,8 +235,8 @@ class JaenPublishFormPage(AbstractEmailForm):
 
     def process_form_submission(self, form, user, *args, **kwargs):
 
-        print(f"{request.user}")
         user = self.publish(
+            user=user,
             git_user=form.cleaned_data["git_user"],
             git_token=form.cleaned_data["git_token"],
             git_remote=form.cleaned_data["git_remote"],
