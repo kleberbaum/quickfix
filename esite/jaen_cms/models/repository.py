@@ -211,27 +211,28 @@ class JaenPublishFormPage(AbstractEmailForm):
 
     # Called when a user registers
     def send_mail(self, form):
-        addresses = [x.strip() for x in self.to_address.split(",")]
+        pass
+        # addresses = [x.strip() for x in self.to_address.split(",")]
 
-        emailheader = "New publish via SNEK Website"
+        # emailheader = "New publish via SNEK Website"
 
-        content = []
-        for field in form:
-            value = field.value()
-            if isinstance(value, list):
-                value = ", ".join(value)
-            content.append("{}: {}".format(field.label, value))
-        content = "\n".join(content)
+        # content = []
+        # for field in form:
+        #     value = field.value()
+        #     if isinstance(value, list):
+        #         value = ", ".join(value)
+        #     content.append("{}: {}".format(field.label, value))
+        # content = "\n".join(content)
 
-        content += "\n\nMade with ❤ by a tiny SNEK"
+        # content += "\n\nMade with ❤ by a tiny SNEK"
 
-        # emailfooter = '<style>@keyframes pulse { 10% { color: red; } }</style><p>Made with <span style="width: 20px; height: 1em; color:#dd0000; animation: pulse 1s infinite;">&#x2764;</span> by <a style="color: lightgrey" href="https://www.aichner-christian.com" target="_blank">Werbeagentur Christian Aichner</a></p>'
+        # # emailfooter = '<style>@keyframes pulse { 10% { color: red; } }</style><p>Made with <span style="width: 20px; height: 1em; color:#dd0000; animation: pulse 1s infinite;">&#x2764;</span> by <a style="color: lightgrey" href="https://www.aichner-christian.com" target="_blank">Werbeagentur Christian Aichner</a></p>'
 
-        # html_message = f"{emailheader}\n\n{content}\n\n{emailfooter}"
+        # # html_message = f"{emailheader}\n\n{content}\n\n{emailfooter}"
 
-        send_mail(
-            self.subject, f"{emailheader}\n\n{content}", addresses, self.from_address
-        )
+        # send_mail(
+        #     self.subject, f"{emailheader}\n\n{content}", addresses, self.from_address
+        # )
 
     def process_form_submission(self, form, user, *args, **kwargs):
 
